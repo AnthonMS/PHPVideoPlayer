@@ -1,0 +1,122 @@
+.content_container {
+    width: 100%;
+    border: 0px solid lightgray;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+.content2_container {
+    border: 0px solid lightgray;
+    overflow: hidden;
+}
+
+.media_container {
+    margin: 20px 10px;
+    display: inline-block;
+}
+
+.media2_container {
+    float: left;
+    margin: 20px 10px;
+}
+
+.content_container::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: #919191;
+}
+
+.content_container::-webkit-scrollbar {
+    width: 12px;
+    background-color: #919191;
+}
+
+.content_container::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #555;
+}
+
+.serie_figure {
+    margin: 0;
+    padding: 0;
+}
+
+.season_figure {
+    margin: 0;
+    padding: 0;
+}
+
+.content_label {
+    text-align: center;
+}
+.centerStyle_noMarg {
+    text-align: center;
+}
+
+img:hover {
+    cursor: pointer;
+    -moz-box-shadow: 0px 0px 2px 2px blue;
+    -webkit-box-shadow: 0px 0px 2px 2px blue;
+    box-shadow: 0px 0px 2px 2px blue;
+}
+
+.episode_table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+}
+.episode_header, .episode_header_left {
+    background-color: #555;
+    padding: 12px;
+}
+.episode_header_left {
+    text-align: left;
+}
+.episode_cell_left {
+    text-align: left;
+}
+.episode_cell, .episode_cell_left {
+    padding: 8px;
+}
+.episode_row {
+    border: 1px solid gray;
+    background-color: #919191;
+}
+.episode_row:nth-child(even) {
+    background-color: #9e9e9e;
+}
+.episode_row:hover {
+    cursor: pointer;
+    background-color: #555;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

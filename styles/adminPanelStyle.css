@@ -1,0 +1,71 @@
+.test_container {
+    padding: 0 100px;
+}
+
+.panel_container {
+    /*border: 1px solid lightgray;*/
+    text-align: center;
+    margin: 0 auto;
+}
+
+h1 {
+    overflow: hidden;
+}
+
+.adminInput {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.submitBtn {
+    background-color: #606060;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.submitBtn:hover {
+    opacity: 0.8;
+}
+
+.center_submit {
+    text-align: center;
+    margin: 0 200px;
+}
+
+.checkbox_style {
+    width: 25px;
+    height: 25px;
+
+}
+
+.checkbox_style:hover {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.checkbox_label {
+
+}
+.checkbox_label:hover {
+    cursor: pointer;
+}
+
+@media (max-width: 1000px) {
+    .test_container {
+        padding: 0;
+    }
+}
+
+@media (max-width: 800px) {
+    .center_submit {
+        margin: 0;
+    }
+}

@@ -1,0 +1,92 @@
+form {
+    margin: 5px 40px;
+}
+
+/*input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}*/
+
+.loginInput {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.loginBtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.loginBtn:hover {
+    opacity: 0.8;
+}
+
+.container {
+    padding: 16px 40px;
+}
+
+.centerStyle {
+    text-align: center;
+    margin: 0 100px;
+}
+
+@media (max-width: 600px) {
+    .centerStyle {
+        margin: 0;
+    }
+}
+
+.errorMsg {
+    color: red;
+    font-weight: bold;
+    font-size: 200%;
+}
+
+.successMsg {
+    color: #4CAF50;
+    font-weight: bold;
+    font-size: 200%;
+}
+
+
+#logoutBtn {
+    background-color: red;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    position: fixed;
+    top: 0px;
+    right: 8px;
+}
+
+#logoutBtn:hover {
+    opacity: 0.8;
+}
+
+
+
+
+
+
+
+
+
+
+
+

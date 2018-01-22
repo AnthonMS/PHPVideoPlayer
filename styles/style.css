@@ -1,0 +1,45 @@
+#header {
+    background: #333;
+    height: 100px;
+}
+
+#header h1 {
+    text-align: center;
+    padding-top: 20px;
+    color: white;
+}
+
+.mainBtns {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+.nav_button {
+    float: left;
+    border-right: 1px solid #bbb;
+}
+.nav_button:last-child {
+    border-right: none;
+}
+
+.nav_button a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 26px;
+    text-decoration: none;
+}
+
+.nav_button a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #4CAF50;
+}
+
+body {
+    background-color: gray;
+}
