@@ -40,7 +40,7 @@ if (!isset($_GET["watch"]))
         $seriesTitle = $_GET["watch"];
         $seasonNo = $_GET["season"];
         // SELECT * FROM episodes_new WHERE serie_title='south_park' AND season_no='1'
-        $sql = "SELECT * FROM episodes_new WHERE serie_title='$seriesTitle' AND season_no='$seasonNo'";
+        $sql = "SELECT * FROM episodes_new WHERE serie_title='$seriesTitle' AND season_no='$seasonNo' ORDER BY episode_no ASC";
         $result = $connect->query($sql);
 
         if ($result->num_rows > 0)
@@ -61,7 +61,7 @@ if (!isset($_GET["watch"]))
                 $lastEpi = $row["last_episode"];
                 $lastSea = $row["last_season"];
                 //echo "<br />$epiTitle S".$seaNo."E$epiNo";
-                echo "<tr class='episode_row'>";
+                echo "<tr class='episode_row' data-series='$seriesTitle' data-season='$seaNo' data-epiNo='$epiNo' data-epiTitle='$epiTitle'>";
                 echo "<td class='episode_cell_left'>$seriesTitle</td>";
                 echo "<td class='episode_cell'>$seaNo</td>";
                 echo "<td class='episode_cell'>$epiNo</td>";
@@ -84,5 +84,32 @@ if (!isset($_GET["watch"]))
     </html>
 
 <script>
-    
+    $(document).on("click", ".episode_row", function (event) {
+        updateQueryStringParam("page", "watch_episode");
+        updateQueryStringParam("watch", $(this).data("series"));
+        updateQueryStringParam("season", $(this).data("season"));
+        updateQueryStringParam("episodeNo", $(this).data("epino"));
+        updateQueryStringParam("episodeTitle", $(this).data("epititle"));
+        window.location.reload(false);
+    });
+
+    var updateQueryStringParam = function (key, value) {
+        var baseUrl = [location.protocol, '//', location.host, location.pathname].join(''),
+            urlQueryString = document.location.search,
+            newParam = key + '=' + value,
+            params = '?' + newParam;
+
+        // If the "search" string exists, then build params from it
+        if (urlQueryString) {
+            keyRegex = new RegExp('([\?&])' + key + '[^&]*');
+
+            // If param exists already, update it
+            if (urlQueryString.match(keyRegex) !== null) {
+                params = urlQueryString.replace(keyRegex, "$1" + newParam);
+            } else { // Otherwise, add it to end of query string
+                params = urlQueryString + '&' + newParam;
+            }
+        }
+        window.history.replaceState({}, "", baseUrl + params);
+    };
 </script>

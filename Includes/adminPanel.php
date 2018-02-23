@@ -14,6 +14,7 @@ include("Includes/DBconnect.php");
 ?>
 
 <?php
+$testVar = ""; $testVar2; $testVar3;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
@@ -34,6 +35,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                 //echo "Trying to submit new series to database";
                 submitNewSeries($connect, $_POST["serieInput"], $_POST["seasonInput"], $_POST["urlInput"], $_POST["catInput"]);
                 break;
+            case "episode": // Submit new episode to series
+                submitEpisode($connect,
+                    $_POST["serieInput"], $_POST["episodeInput"], $_POST["seasonInput"],
+                    $_POST["EpisodeNoInput"], $_POST["lastSeasonInput"], $_POST["lastEpiInput"]);
+                $testVar = $_POST["serieInput"];
+                $testVar2 = $_POST["seasonInput"];
+                $testVar3 = $_POST["EpisodeNoInput"]+1;
+                //echo $testVar;
+                break;
         }
     }
 }
@@ -53,14 +63,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         <h3>Add Episode to series</h3>
         <form method="post" action="?page=admin&submit=episode">
             <div class="panel_container">
-                <label><b>Serie</b></label>
-                <input type="text" placeholder="ex. south_park or gravity_falls etc." name="serieInput" class="adminInput" required>
-                <label><b>Season</b></label>
-                <input type="number" placeholder="Enter Season, ex. 1 or 17" name="seasonInput" class="adminInput" required>
-                <label><b>URL</b></label>
-                <input type="text" placeholder="ex. https://worldofcactus.files.wordpress.com/2015/02/south-park-season-4-front.jpg" name="urlInput" class="adminInput" required>
+                <label><b>Series Title</b></label>
+                <input type="text" placeholder="ex. south_park or gravity_falls etc." name="serieInput" class="adminInput" value="<?php echo $testVar ?>" required>
+                <label><b>Episode Title</b></label>
+                <input type="text" placeholder="ex. Cartman Gets An Anal Probe." name="episodeInput" class="adminInput" required>
+                <label><b>Season No.</b></label>
+                <input type="number" placeholder="Enter Season, ex. 1 or 17" name="seasonInput" class="adminInput" value="<?php echo $testVar2 ?>" required>
+                <label><b>Episode No.</b></label>
+                <input type="number" placeholder="Enter Episode, ex. 1 or 12" name="EpisodeNoInput" class="adminInput" value="<?php echo $testVar3 ?>" required>
+                <label class="checkbox_label">
+                    <input type="checkbox" name="lastSeasonInput" class="checkbox_style"><b> Last Season</b>
+                </label>
+                <label class="checkbox_label">
+                    <input type="checkbox" name="lastEpiInput" class="checkbox_style"><b> Last Episode</b>
+                </label>
+
                 <div class="center_submit">
-                    <button type="submit" class="submitBtn">Submit Thumbnail</button> <br />
+                    <button type="submit" class="submitBtn">Submit Episode</button> <br />
                 </div>
             </div>
         </form>
@@ -126,7 +145,7 @@ function submitThumbnail($conn, $title, $season, $thumbURL)
     if (checkForExistingThumb($conn, $series, $season) == TRUE)
     {
         //echo "<h1 class='centerStyle'>Thumbnail already exist for this season!</h1>";
-        $sql = "UPDATE thumbnails SET thumb_url = '$url' WHERE season_no=$season";
+        $sql = "UPDATE thumbnails SET thumb_url = '$url' WHERE season_no=$season AND serie_title='$title'";
         submitDBQuery($conn, $sql, true);
     } else {
         $sql = "INSERT INTO thumbnails (serie_title, season_no, thumb_url) VALUES ('$series','$season','$url')";
@@ -222,6 +241,25 @@ function checkExistingSeries($conn, $title)
     }
 
     return $seriesExist;
+}
+
+function submitEpisode($conn, $seriesTitle, $episodeTitle, $seasonNo, $episodeNo, $lastSeason, $lastEpi)
+{
+    $seriesTitle = checkInput($seriesTitle);
+    $episodeTitle = checkInput($episodeTitle);
+    $seasonNo = checkInput($seasonNo);
+    $episodeNo = checkInput($episodeNo);
+    $seriesTitle = mysqli_real_escape_string($conn, $seriesTitle);
+    $episodeTitle = mysqli_real_escape_string($conn, $episodeTitle);
+    $seasonNo = mysqli_real_escape_string($conn, $seasonNo);
+    $episodeNo = mysqli_real_escape_string($conn, $episodeNo);
+    if ($lastEpi == TRUE) { $lastEpi = "1"; } else { $lastEpi = "0"; }
+    if ($lastSeason == TRUE) { $lastSeason = "1"; } else { $lastSeason = "0"; }
+
+    //echo $seriesTitle . " " . $episodeTitle . " " . $seasonNo . " " . $episodeNo;
+    $sql = "INSERT INTO episodes_new (episode_no, episode_title, last_episode, last_season, season_no, serie_title) 
+                             VALUES ('$episodeNo','$episodeTitle','$lastEpi','$lastSeason','$seasonNo','$seriesTitle')";
+    submitDBQuery($conn, $sql, false);
 }
 
 function submitDBQuery($conn, $sql, $update)
