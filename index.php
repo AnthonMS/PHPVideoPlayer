@@ -62,14 +62,11 @@ if (!isset($_GET["page"]))
             case "admin":
                 include("admin.php");
                 break;
-            case "show_seasons":
+            case "watch_series":
                 include("series/show_seasons.php");
                 break;
             case "show_episodes":
                 include("series/show_episodes.php");
-                break;
-            case "watch_episode":
-                include ("series/watch_episode.php");
                 break;
 
             case "test":

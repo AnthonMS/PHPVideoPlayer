@@ -49,7 +49,7 @@
 <script>
     $(document).on("click", ".imageThumb", function (event) {
         //alert(event.target.alt);
-        updateQueryStringParam("page", "show_seasons");
+        updateQueryStringParam("page", "watch_series");
         updateQueryStringParam("watch", event.target.alt);
         window.location.reload(false);
     });
