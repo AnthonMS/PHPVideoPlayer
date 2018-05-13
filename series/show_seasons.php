@@ -26,7 +26,8 @@ if (!isset($_GET["watch"]))
     //include("adminPanel.php"); // make this show either error.php or 404.php (NOT made yet)
 } else
 {
-    $watchTitle = $_GET["watch"];
+    $watchTitle = checkInput($_GET["watch"]);
+    $watchTitle = mysqli_real_escape_string($connect, $watchTitle);
     $newWatchTitle = str_replace("_", " ", $watchTitle, $count);
     //echo "You wanna watch $watchTitle";
 

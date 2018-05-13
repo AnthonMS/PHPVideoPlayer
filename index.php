@@ -6,6 +6,8 @@
  * Time: 13:09
  */
 
+
+
 ?>
 <html>
 <head>
@@ -20,7 +22,8 @@
 
 <body>
 <header id="header">
-    <h1>TitLe gOeS HeRe</h1>
+    <?php $title = "TitLe gOeS HeRe"; ?>
+    <h1><?php $title ?></h1>
 </header>
 
 <div id="nav">
@@ -42,6 +45,7 @@
 
 <?php
 include ("Includes/DBconnect.php");
+include ("Includes/functions_new.php");
 
 if (!isset($_GET["page"]))
 {
@@ -67,6 +71,9 @@ if (!isset($_GET["page"]))
                 break;
             case "show_episodes":
                 include("series/show_episodes.php");
+                break;
+            case "watch_episode":
+                include("series/watch_episode.php");
                 break;
 
             case "test":

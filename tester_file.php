@@ -21,12 +21,16 @@
 
 <!--<div class="video_container">
     <video id="videoID" width="480" height="320" controls>
-        <source src="media/series/south_park/south_park S1E1 Cartman Gets an Anal Probe.mp4" type="video/mp4">
+        <source src="media/series/south_park/South Park S1E1.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 </div>-->
 
+
+
 <?php
+
+
 
 ?>
 
@@ -35,9 +39,9 @@
 </html>
 
 <script>
-    var vid = document.getElementById("videoID");
+    /*var vid = document.getElementById("videoID");
     vid.onended = function (event)
     {
         alert("The video has ended!");
-    }
+    }*/
 </script>

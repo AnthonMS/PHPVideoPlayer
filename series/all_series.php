@@ -26,13 +26,14 @@
         while ($row = $result->fetch_assoc())
         {
             //echo "<br />" . $row['title'];
+            $numOfSeasons = $row['seasons'];
             $title = $row['title'];
             $thumbURL = $row["url"];
             $newTitle = str_replace("_", " ", $title, $count);
             echo "
                  <div class=\"media_container\">
                      <figure class='serie_figure'>
-                         <img src='$thumbURL' alt=\"$title\" width=\"110\" height=\"165\" class=\"imageThumb\">
+                         <img src='$thumbURL' alt=\"$title\" data-numOfSeasons='$numOfSeasons' width=\"110\" height=\"165\" class=\"imageThumb\">
                          <figcaption class=\"content_label\">$newTitle</figcaption>
                      </figure>
                  </div>
@@ -51,6 +52,8 @@
         //alert(event.target.alt);
         updateQueryStringParam("page", "watch_series");
         updateQueryStringParam("watch", event.target.alt);
+        var numOfSeasons = event.currentTarget.getAttribute('data-numOfSeasons');
+        updateQueryStringParam("numOfSeasons", numOfSeasons);
         window.location.reload(false);
     });
 

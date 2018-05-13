@@ -69,14 +69,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     }
 }
 
-function checkInput($data)
+/*function checkInput($data)
 {
     $data = trim($data);
     $data = stripcslashes($data);
     $data = strip_tags($data);
     $data = htmlspecialchars($data);
     return $data;
-}
+}*/
 ?>
 
 <form method="post" action="?page=admin">
