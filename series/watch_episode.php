@@ -20,6 +20,7 @@ if (empty($_SESSION["username"]))
 <head>
     <title>Watch Episode</title>
     <meta charset="UTF-8">
+    <script src="js/js.js"></script>
 </head>
 <body>
 
@@ -82,6 +83,9 @@ if (empty($_SESSION["username"]))
                             </video>
                         </div>";
 
+                // Make table with all the episodes and seasons, so the user can switch easily
+                include ("show_episodes.php");
+
 
             } else { echo "Error!"; }
         } else { echo "Error!"; }
@@ -94,17 +98,9 @@ if (empty($_SESSION["username"]))
 
 
 <script>
-    var getQueryStringParam = function (key) {
-        var url_string = window.location.href;
-        var url = new URL(url_string);
-        var param = url.searchParams.get(key);
-        return param;
-    };
-
     var baseSrc = "media/series/";
     var vid = document.getElementById("videoID");
     var vidSource = vid.getElementsByTagName('source')[0];
-    //console.log(vidSource);
 
     var seaNo = vid.getAttribute('data-season');
     var nextSea = seaNo;
@@ -112,24 +108,24 @@ if (empty($_SESSION["username"]))
     var epiNo = vid.getAttribute('data-episode');
     var nextEpi = epiNo;
     var prevEpi = epiNo;
-    var numOfEpisodes = getQueryStringParam('numOfEpisodes');
-    var numOfSeasons = getQueryStringParam('numOfSeasons');
-    var lastSeason = vid.getAttribute('data-lastseason');
-    var lastEpisode = vid.getAttribute('data-lastepisode');
+    //var numOfEpisodes = getQueryStringParam('numOfEpisodes');
+    var numOfEpisodes = document.getElementById('episodesHolder').getAttribute("data-numOfEpisodes");
+    var numOfSeasons = getQueryStringParam('numOfSeasons')
 
     //console.log(numOfSeasons + ", " + numOfEpisodes);
 
     window.onload = windowLoad();
 
     function windowLoad() {
-        if (epiNo < numOfEpisodes) {
+        //console.log("numOfEpisodes: " + numOfEpisodes + ", numOfSeasons: " + numOfSeasons);
+        //if (epiNo < numOfEpisodes) {
             // Current episode is lower than number of episodes
             nextEpi++;
-        }
+        //}
 
-        if (seaNo < numOfSeasons) {
+       // if (seaNo < numOfSeasons) {
             nextSea++;
-        }
+        //}
 
         if (epiNo != 1) {
             prevEpi--;
@@ -139,105 +135,67 @@ if (empty($_SESSION["username"]))
             prevSea--;
         }
 
-        //console.log(prevSea + ", " + prevEpi);
-        console.log(seaNo + ", " + epiNo);
-        //console.log(nextSea + ", " + nextEpi);
+        //console.log("PrevSea: " + prevSea + ", PrevEpi: " + prevEpi);
+        //console.log("CurrentSea: " + seaNo + ", CurrentEpi: " + epiNo);
+        //console.log("NextSea: " + nextSea + ", NextEpi: " + nextEpi);
     }
 
     $('#testBtn').click(function () {
-        //console.log(getQueryStringParam("watch"));
-        //vidSource.setAttribute("src", "Testing123");
-        var orgWatch = getQueryStringParam("watch");
-        var fixedTitle = orgWatch.replace("_", " ");
-        var newSrc = baseSrc + orgWatch;
-
-        //console.log(seaNo + ", " + epiNo);
-
-        //console.log("numOfEpisodes: " + numOfEpisodes);
-        //console.log("Episode: " + epiNo);
-        if (nextEpi > numOfEpisodes) {
-            //console.log("nextEpi is larger than numOfEpisodes");
-            epiNo = 1;
-            nextEpi = 1;
-            if (seaNo >= numOfSeasons) {}
-            else
-            {
-                //console.log("seaNo is not larger than numOfSeasons");
-                seaNo++;
-                nextSea++;
-            }
-            // Call method that changes url params to the new season.
-            updateQueryStringParam("season", nextSea);
-            window.location.reload(false);
-        }
-
-        newSrc = newSrc + "/S" + seaNo + "E" + nextEpi
-        epiNo++; nextEpi++;
-
-        console.log(newSrc);
+        loadNextEpisode();
     });
-
-    /*vid.onplay = function (event)
-    {
-        //console.log("Video has been started!");
-        if (vid.requestFullscreen) {
-            vid.requestFullscreen();
-        } else if (vid.mozRequestFullScreen) {
-            vid.mozRequestFullScreen();
-        } else if (vid.webkitRequestFullscreen) {
-            vid.webkitRequestFullscreen();
-        }
-    }*/
 
     vid.onended = function (event)
     {
         // This will change to the next episode automatically
-        console.log(event);
-        var seaNo = event.currentTarget.getAttribute('data-season');
-        var epiNo = event.currentTarget.getAttribute('data-episode');
-        var lastSeason = event.currentTarget.getAttribute('data-lastseason');
-        var lastEpisode = event.currentTarget.getAttribute('data-lastepisode');
-        // Check if last episode or season
-        if (lastEpisode == 1) { //if last episode is true, set episode to 1
-            epiNo = 1;
-        } else {
-            epiNo++;
-        }
-        if (lastSeason == 1) // if last season is false, increase it
-        {
-            seaNo++;
-        }
-
-        // Check if last episode and season, if true display "No More $Serie_Title"
-        /*if (lastEpisode == 1 && lastSeason == 1) {
-
-        } else {
-            updateQueryStringParam("season", seaNo);
-            updateQueryStringParam("episode", epiNo);
-
-            window.location.reload(false);
-        }*/
+        //loadNextEpisode();
     }
 
-    var updateQueryStringParam = function (key, value) {
-        var baseUrl = [location.protocol, '//', location.host, location.pathname].join(''),
-            urlQueryString = document.location.search,
-            newParam = key + '=' + value,
-            params = '?' + newParam;
+    function loadNextEpisode() {
 
-        // If the "search" string exists, then build params from it
-        if (urlQueryString) {
-            keyRegex = new RegExp('([\?&])' + key + '[^&]*');
+        // Get URL param for series
+        var orgWatch = getQueryStringParam("watch");
+        // Replace _ with spaces
+        var fixedTitle = orgWatch.replace("_", " ");
+        // Create the newSrc
+        var newSrc = baseSrc + orgWatch;
 
-            // If param exists already, update it
-            if (urlQueryString.match(keyRegex) !== null) {
-                params = urlQueryString.replace(keyRegex, "$1" + newParam);
-            } else { // Otherwise, add it to end of query string
-                params = urlQueryString + '&' + newParam;
-            }
+        //console.log("Episode: " + epiNo+ ", Season: " + seaNo);
+
+        // Check if next Episode is larger than total number of episodes
+        if (nextEpi > numOfEpisodes) {
+            // If it is, set the new Episode to episode 1
+            epiNo = 1;
+            nextEpi = 1;
+            seaNo++;
+            nextSea++;
+
+            // Call method that changes url params to the next season and fist episode
+            updateQueryStringParam("season", seaNo);
+            updateQueryStringParam("episode", epiNo);
+            window.location.reload(false);
+        } else {
+            // Append the next episode to the new source
+            newSrc = newSrc + "/" + fixedTitle + " S" + seaNo + "E" + nextEpi + ".mp4";
+
+            console.log(newSrc);
+
+            // Set the new source on the video player
+            vidSource.setAttribute("src", newSrc);
+            // Load the new source
+            vid.load();
+            // Play the new source
+            vid.play();
+            // Update episode in url, but don't reload.
+            updateQueryStringParam("episode", nextEpi);
+
+
+            //console.log("Episode: " + epiNo+ ", Season: " + seaNo);
         }
-        window.history.replaceState({}, "", baseUrl + params);
-    };
+
+        //console.log("Episode: " + epiNo+ ", Season: " + seaNo);
+
+        epiNo++; nextEpi++;
+    }
 
 
 </script>

@@ -19,3 +19,10 @@ var updateQueryStringParam = function (key, value) {
     }
     window.history.replaceState({}, "", baseUrl + params);
 };
+
+var getQueryStringParam = function (key) {
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var param = url.searchParams.get(key);
+    return param;
+};
