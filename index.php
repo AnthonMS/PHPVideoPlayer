@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="styles/adminStyle.css">
     <link rel="stylesheet" type="text/css" href="styles/adminPanelStyle.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/js.js"></script>
 </head>
 
 <body>

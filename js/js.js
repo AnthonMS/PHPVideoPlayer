@@ -26,3 +26,4 @@ var getQueryStringParam = function (key) {
     var param = url.searchParams.get(key);
     return param;
 };
+

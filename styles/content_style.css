@@ -92,6 +92,35 @@ img:hover {
     background-color: #555;
 }
 
+.episode_row_highlight {
+    border: 1px solid gray;
+    background-color: #555;
+}
+
+.seasons_table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.season_column {
+    padding: 15px 5px 15px 5px;
+    border: 1px solid black;
+    background-color: #9e9e9e;
+}
+
+.season_column_highlight {
+    padding: 15px 5px 15px 5px;
+    border: 1px solid black;
+    background-color: #555;
+}
+
+.season_column:hover {
+    cursor: pointer;
+    background-color: #555;
+}
 
 .video_container {
 

@@ -25,10 +25,10 @@ if (empty($_SESSION["username"]))
 <body>
 
 <div class="centerStyle_noMarg">
-    <button id="testBtn">Next video</button>
+
 
     <?php
-
+    //echo "<button id=\"testBtn\">Next video</button>";
     /*echo getcwd() . "<br>";
     $dir = "media/series";
     $files = scandir($dir);
@@ -71,7 +71,7 @@ if (empty($_SESSION["username"]))
                 }
 
 
-                echo "<h3 class='watchTitle'>$episode_title</h3>";
+                echo "<h3 id='episodeTitle' class='watchTitle'>$episode_title</h3>";
 
                 $numOfEpisodes = $_GET['numOfEpisodes'];
                 $numOfSeasons = $_GET['numOfSeasons'];
@@ -117,15 +117,8 @@ if (empty($_SESSION["username"]))
     window.onload = windowLoad();
 
     function windowLoad() {
-        //console.log("numOfEpisodes: " + numOfEpisodes + ", numOfSeasons: " + numOfSeasons);
-        //if (epiNo < numOfEpisodes) {
-            // Current episode is lower than number of episodes
-            nextEpi++;
-        //}
-
-       // if (seaNo < numOfSeasons) {
-            nextSea++;
-        //}
+        nextEpi++;
+        nextSea++;
 
         if (epiNo != 1) {
             prevEpi--;
@@ -147,7 +140,7 @@ if (empty($_SESSION["username"]))
     vid.onended = function (event)
     {
         // This will change to the next episode automatically
-        //loadNextEpisode();
+        loadNextEpisode();
     }
 
     function loadNextEpisode() {
@@ -158,7 +151,6 @@ if (empty($_SESSION["username"]))
         var fixedTitle = orgWatch.replace("_", " ");
         // Create the newSrc
         var newSrc = baseSrc + orgWatch;
-
         //console.log("Episode: " + epiNo+ ", Season: " + seaNo);
 
         // Check if next Episode is larger than total number of episodes
@@ -187,14 +179,47 @@ if (empty($_SESSION["username"]))
             vid.play();
             // Update episode in url, but don't reload.
             updateQueryStringParam("episode", nextEpi);
-
-
             //console.log("Episode: " + epiNo+ ", Season: " + seaNo);
         }
-
         //console.log("Episode: " + epiNo+ ", Season: " + seaNo);
-
         epiNo++; nextEpi++;
+
+        findNextEpisode();
+    }
+
+    function findNextEpisode()
+    {
+        var page = getQueryStringParam("page");
+        if (page == "watch_episode")
+        {
+            var episode = getQueryStringParam("episode");
+            var season = getQueryStringParam("season");
+            //console.log(episode + ", " + season);
+
+            highlightEpisode(episode, season);
+
+        }
+    }
+
+    function highlightEpisode(episode, season)
+    {
+        $('#dataTable tr').each(function() {
+            var row = $(this)[0];
+            var rowEpisode = row.getAttribute("data-epino");
+
+            if (row.className = "episode_row_highlight")
+            {
+                row.className = "episode_row";
+            }
+            //console.log(test);
+            if (rowEpisode == episode)
+            {
+                //console.log("Found the episode: " + rowEpisode);
+                row.className = "episode_row_highlight";
+                var title = $(".episode_row_highlight td")[3].innerText;
+                $('#episodeTitle')[0].innerText = title;
+            }
+        });
     }
 
 
