@@ -18,6 +18,8 @@ session_start();
 
 <?php
 
+//echo $_SESSION["username"] . ", " . $_SESSION["admin"];
+
 if (empty($_SESSION["username"]))
 {
     include("Includes/login_form.php");
@@ -25,9 +27,14 @@ if (empty($_SESSION["username"]))
     //echo "Session started as " . $_SESSION["username"] . " - " . $_SESSION["admin"];
     echo "<a href='Includes/logout.php' id='logoutBtn'>Logout</a>";
 
+
     if ($_SESSION["admin"] == true)
     {
-        showAdminPanel();
+        // This dont work
+        //showAdminPanel();
+        // This works? Weird
+        include ("Includes/adminPanel_new.php");
+        //include("tester_file.php");
     } else {
         dontShowAdminPanel();
     }

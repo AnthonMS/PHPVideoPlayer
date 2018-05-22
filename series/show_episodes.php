@@ -79,6 +79,18 @@ if (!isset($_GET["watch"]))
                     <th class='episode_header'>Episode</th>
                     <th class='episode_header_left'>Title</th>
                  </tr>";
+
+            $newTitle = str_replace("_", " ", $seriesTitle, $count);
+            $seaNo = $firstRow["season_no"];
+            $epiNo = $firstRow["episode_no"];
+            $epiTitle = $firstRow["episode_title"];
+            echo "<tr class='episode_row' data-series='$newTitle' data-season='$seaNo' data-epiNo='$epiNo'>";
+            echo "<td class='episode_cell_left'>$newTitle</td>";
+            echo "<td class='episode_cell'>$seaNo</td>";
+            echo "<td class='episode_cell'>$epiNo</td>";
+            echo "<td class='episode_cell_left'>$epiTitle</td>";
+            //echo "<td class='episode_cell'>$seasons</td>";
+            echo "</tr>";
             while ($row = $result->fetch_assoc())
             {
                 $numOfEpisodes = $numOfEpisodes + 1;

@@ -1,19 +1,12 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: ASteiness
- * Date: 16-01-2018
- * Time: 20:35
+ * User: Anthon
+ * Date: 22-05-2018
+ * Time: 15:07
  */
 
-// This site is for making and testing new pages...
-
-//echo "Testing123!! This is adminPanel.php";
-include("Includes/DBconnect.php");
-
-?>
-
-<?php
+$title = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
@@ -28,25 +21,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         switch ($_GET["submit"])
         {
             case "thumbnail": // Submit new thumbnail to (new) season
-                //submitThumbnail($connect, $_POST["serieInput"], $_POST["seasonInput"], $_POST["urlInput"]);
+                submitThumbnail($connect, $_POST["serieInput"], $_POST["seasonInput"], $_POST["urlInput"]);
+                $title = $_POST["serieInput"];
                 break;
             case "series": // Submit new series, or update existing one
-                //submitNewSeries($connect, $_POST["serieInput"], $_POST["seasonInput"], $_POST["urlInput"], $_POST["catInput"]);
+                //echo "Trying to submit new series to database";
+                submitSeries($connect, $_POST["serieInput"], $_POST["seasonInput"], $_POST["urlInput"], $_POST["catInput"]);
+                //checkExistingSeries($connect, $_POST["serieInput"]);
+                $title = $_POST["serieInput"];
                 break;
-
+            case "episode":
+                submitEpisode($connect, $_POST["serieInput"],  $_POST["seasonInput"],  $_POST["episodeInput"], $_POST["episodeTitleInput"], $_POST["numOfEpiInput"]);
+                //echo $_POST["serieInput"] . ", " . $_POST["seasonInput"] . ", " . $_POST["episodeInput"] . ", " . $_POST["episodeTitleInput"] . ", " . $_POST["numOfEpiInput"];
+                break;
         }
     }
 }
-?>
 
+?>
 <html>
 <head>
     <title>Admin Panel</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../styles/adminPanelStyle.css">
 </head>
-<body>
-
 <div class="test_container">
     <div class="panel_container">
         <h1>Admin Panel</h1>
@@ -54,13 +51,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         <form method="post" action="?page=admin&submit=episode">
             <div class="panel_container">
                 <label><b>Serie</b></label>
-                <input type="text" placeholder="ex. south_park or gravity_falls etc." name="serieInput" class="adminInput" required>
+                <input value="silicon_valley" type="text" placeholder="ex. south_park or gravity_falls etc." name="serieInput" class="adminInput" required>
                 <label><b>Season</b></label>
-                <input type="number" placeholder="Enter Season, ex. 1 or 17" name="seasonInput" class="adminInput" required>
-                <label><b>URL</b></label>
-                <input type="text" placeholder="ex. https://worldofcactus.files.wordpress.com/2015/02/south-park-season-4-front.jpg" name="urlInput" class="adminInput" required>
+                <input value="5" type="number" placeholder="Enter Season, ex. 1 or 17" name="seasonInput" class="adminInput" required>
+                <label><b>Episode</b></label>
+                <input value="1" type="number" placeholder="Enter Episode number, ex. 1 or 17" name="episodeInput" class="adminInput" required>
+                <label><b>Number of Episodes</b></label>
+                <input value="10" type="number" placeholder="Enter Number of episodes, ex. 13 or 24" name="numOfEpiInput" class="adminInput" required>
+                <label><b>Episode title</b></label>
+                <input type="text" placeholder="Enter Episode title, ex. Cartman Get's An Anal Probe" name="episodeTitleInput" class="adminInput" required>
                 <div class="center_submit">
-                    <button type="submit" class="submitBtn">Submit Thumbnail</button> <br />
+                    <label class="checkbox_label">
+                        <input type="checkbox" name="lastEpiInput" class="checkbox_style"> Last Episode
+                    </label>
+                    <label class="checkbox_label">
+                        <input type="checkbox" name="lastSeaInput" class="checkbox_style"> Last Season
+                    </label>
+                    <button type="submit" class="submitBtn">Submit Episode</button> <br />
                 </div>
             </div>
         </form>
@@ -71,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         <form method="post" action="?page=admin&submit=thumbnail">
             <div class="panel_container">
                 <label><b>Serie</b></label>
-                <input type="text" placeholder="ex. south_park or gravity_falls etc." name="serieInput" class="adminInput" required>
+                <input value="" type="text" placeholder="ex. south_park or gravity_falls etc." name="serieInput" class="adminInput" required>
                 <label><b>Season</b></label>
                 <input type="number" placeholder="Enter Season, ex. 1 or 17" name="seasonInput" class="adminInput" required>
                 <label><b>URL</b></label>
@@ -111,38 +118,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 </body>
 </html>
 
-
 <?php
-// This is for functions, so they do not fill up the space above!
-function submitThumbnail($conn, $title, $season, $thumbURL)
+
+function submitEpisode($conn, $series, $season, $epiNo, $epiTitle, $numOfEpisodes)
+{
+    $series = checkInput($series);
+    $season = checkInput($season);
+    $epiNo = checkInput($epiNo);
+    $epiTitle = checkInput($epiTitle);
+    $numOfEpisodes = checkInput($numOfEpisodes);
+
+    $sql = "INSERT INTO episodes_new (episode_no, episode_title, season_no, serie_title, numOfEpisodes, last_episode, last_season)";
+    $sql .= " VALUES ('$epiNo', '$epiTitle', '$season', '$series', '$numOfEpisodes'";
+    if ($_POST["lastEpiInput"] == TRUE)
+    {
+        $sql .= ", '1'";
+    }
+    else
+    {
+        $sql .= ", '0'";
+    }
+    if ($_POST["lastSeaInput"] == TRUE)
+    {
+        $sql .= ", '1')";
+    }
+    else
+    {
+        $sql .= ", '0')";
+    }
+
+    //echo $sql;
+    $conn->query($sql);
+}
+
+
+function submitThumbnail($conn, $title, $season, $url)
 {
     $series = checkInput($title);
     $season = checkInput($season);
-    $url = checkInput($thumbURL);
+    $url = checkInput($url);
     $series = mysqli_real_escape_string($conn, $series);
     $season = mysqli_real_escape_string($conn, $season);
     $url = mysqli_real_escape_string($conn, $url);
 
-    if (checkForExistingThumb($conn, $series, $season) == TRUE)
+    $exist = checkExistingThumb($conn, $title, $season);
+    if ($exist)
     {
-        //echo "<h1 class='centerStyle'>Thumbnail already exist for this season!</h1>";
         $sql = "UPDATE thumbnails SET thumb_url = '$url' WHERE season_no=$season AND serie_title='$title'";
-        submitDBQuery($conn, $sql, true);
-    } else {
-        $sql = "INSERT INTO thumbnails (serie_title, season_no, thumb_url) VALUES ('$series','$season','$url')";
-        submitDBQuery($conn, $sql, false);
+        $conn->query($sql);
     }
+    else
+    {
+        $sql = "INSERT INTO thumbnails (serie_title, season_no, thumb_url) VALUES ('$series','$season','$url')";
+        $conn->query($sql);
+    }
+
 }
 
-function checkForExistingThumb($conn, $title, $season)
+function checkExistingThumb($conn, $title, $season)
 {
-    $series = checkInput($title);
-    $season = checkInput($season);
-    $series = mysqli_real_escape_string($conn, $series);
-    $season = mysqli_real_escape_string($conn, $season);
-    $thumbExists = false;
-
-    $sql = "SELECT serie_title, season_no FROM thumbnails WHERE serie_title='$series'";
+    $exist = false;
+    $sql = "SELECT serie_title, season_no FROM thumbnails WHERE serie_title='$title'";
     $result = $conn->query($sql);
     if ($result->num_rows > 0)
     {
@@ -150,15 +186,14 @@ function checkForExistingThumb($conn, $title, $season)
         {
             if ($row["season_no"] == $season)
             {
-                //echo "Thumbnail already exists!";
-                $thumbExists = true;
+                $exist = true;
             }
         }
     }
-    return $thumbExists;
+    return $exist;
 }
 
-function submitNewSeries($conn, $title, $seasons, $url, $categories)
+function submitSeries($conn, $title, $seasons, $url, $categories)
 {
     $title = checkInput($title);
     $seasons = checkInput($seasons);
@@ -169,9 +204,9 @@ function submitNewSeries($conn, $title, $seasons, $url, $categories)
     $url = mysqli_real_escape_string($conn, $url);
     $categories = mysqli_real_escape_string($conn, $categories);
 
-    if (checkExistingSeries($conn, $title) == true)
+    $exist = checkExistingSeries($conn, $title);
+    if ($exist)
     {
-        // Series already exist, so update the url and no. of seasons
         $sql = "";
         if (empty($seasons) || empty($url) || empty($categories)) {
             // One of the fields where empty
@@ -191,9 +226,10 @@ function submitNewSeries($conn, $title, $seasons, $url, $categories)
             $sql .= ", popular='0'";
         }
         $sql .= " WHERE title='$title'";
-        submitDBQuery($conn, $sql, true);
-    } else {
-        // Series do NOT exist, so add it to table
+        $conn->query($sql);
+    }
+    else
+    {
         $sql = "INSERT INTO series (title,url,seasons,category,popular)";
         $sql.= " VALUES ('$title','$url','$seasons','$categories'";
         if ($_POST["popularInput"] == true)
@@ -202,49 +238,25 @@ function submitNewSeries($conn, $title, $seasons, $url, $categories)
         } else {
             $sql.= ", '0')";
         }
-        submitDBQuery($conn, $sql, false);
+        $conn->query($sql);
     }
 }
 
 function checkExistingSeries($conn, $title)
 {
-    $seriesExist = false;
-    $title = checkInput($title);
-    $title = mysqli_real_escape_string($conn, $title);
-
+    $exist = false;
     $sql = "SELECT * FROM series WHERE title='$title'";
     $result = $conn->query($sql);
     if ($result->num_rows > 0)
     {
-        // Series already exist in database
-        $seriesExist = true;
-        //echo "$title already exist!!! <br />";
+        //echo " It is true";
+        $exist = true;
     }
 
-    return $seriesExist;
+    //echo "It is a test";
+
+    return $exist;
 }
 
-function submitDBQuery($conn, $sql, $update)
-{
-    if ($conn->query($sql) === TRUE)
-    {
-        if ($update == true)
-        {
-            echo "<h1 class='centerStyle'>Updated series successfully!</h1>";
-        } else {
-            echo "<h1 class='centerStyle'>Submission successful!</h1>";
-        }
-    } else {
-        echo "<h1 class='centerStyle'>Submission failed! Error: " . $conn->error . "</h1>";
-    }
-}
-
-function checkInput($data)
-{
-    $data = trim($data);
-    $data = stripcslashes($data);
-    $data = strip_tags($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
 ?>
+

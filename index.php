@@ -7,7 +7,7 @@
  */
 
 
-
+session_start();
 ?>
 <html>
 <head>
@@ -24,7 +24,7 @@
 <body>
 <header id="header">
     <?php $title = "TitLe gOeS HeRe"; ?>
-    <h1><?php $title ?></h1>
+    <h1> Title goes here </h1>
 </header>
 
 <div id="nav">
@@ -38,6 +38,9 @@
         <li class="nav_button">
             <a href="?page=series">Series</a>
         </li>
+        <li class="nav_button">
+            <a href="?page=test">Test</a>
+        </li>
         <li class="nav_button" style="float:right;border-left:1px solid #bbb">
             <a href="?page=admin">Admin</a>
         </li>
@@ -45,6 +48,8 @@
 </div>
 
 <?php
+//echo $_SESSION["username"] . ", " . $_SESSION["admin"];
+
 include ("Includes/DBconnect.php");
 include ("Includes/functions_new.php");
 

@@ -1,0 +1,12 @@
+// Put two slashes in front to make it a comment
+// Insert every episode in the same order as shown underneath (With comma and a space between each value)
+// SeriesTitle,- SeasonNumber,- EpisodeNumber,- EpisodeTitle,- NumberOfEpisodes,- lastEpisode,- lastSeason
+// Also set two salshes if you want to seperate lines. DO NOT JUST USE ENTER
+//
+// IMPORTANT NOTE: If there is an apostrophe in one of the names, ex. The Time Traveler's Pig
+// Use 2 apostrophes, ex. The Time Traveler''s Pig
+//
+// EXAMPLE:::
+//Gravity_Falls,- 2,- 1,- Scary-oke,- 20,- 0,- 1
+//Gravity_Falls,- 2,- 2,- Into the Bunker,- 20,- 0,- 1
+//Gravity_Falls,- 2,- 3,- The Golf War,- 20,- 0,- 1

@@ -18,30 +18,93 @@
 <body>
 
 <h1>This is tester_file.php</h1>
-
-<!--<div class="video_container">
-    <video id="videoID" width="480" height="320" controls>
-        <source src="media/series/south_park/South Park S1E1.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-</div>-->
-
-
-
 <?php
+
+$myfile = fopen("TxtFiles/testfile.txt", "r") or die("Unable to open file");
+
+$lineArray = array();
+
+
+while(!feof($myfile))
+{
+    $line = fgets($myfile);
+    //echo $line[0] . "<br>";
+    if ($line[0] !== "/")
+    {
+        //echo $line . "<br>";
+        $lineArray[] = $line;
+    }
+
+}
+$dataArray = array();
+
+foreach ($lineArray as $line)
+{
+    $temp = explode(",- ", $line);
+    array_push($dataArray, $temp);
+}
+$sqlString = "INSERT INTO episodes_new (episode_no, episode_title, season_no, serie_title, numOfEpisodes, last_episode, last_season) VALUES ";
+//$sqlString.= " VALUES ('$epiNo', '$epiTitle', '$season', '$series', '$numOfEpisodes', '1', '0')";
+
+$arrLength = count($dataArray);
+for ($i = 0; $i < $arrLength; $i++)
+{
+    $sqlString .= "(";
+    $seriesTitle = "'" . $dataArray[$i][0] . "', ";
+    $seasonNumber = "'" . $dataArray[$i][1] . "', ";
+    $episodeNumber = "'" . $dataArray[$i][2] . "', ";
+    $episodeTitle = "'" . $dataArray[$i][3] . "', ";
+    $numberOfEpisodes = "'" . $dataArray[$i][4] . "', ";
+    $lastEpisode = "'" . $dataArray[$i][5] . "', ";
+    $lastSeason = "'" . $dataArray[$i][6][0] . "'";
+    //echo $seriesTitle . " - " . $seasonNumber . " - " . $episodeNumber . " - " . $episodeTitle . " - " . $numberOfEpisodes . " - " . $lastEpisode . " - " . $lastSeason . "<br>";
+
+    //$sqlString .= "'" . $episodeNumber . "', '" . $episodeTitle . "', '" . $seasonNumber . "', '" . $seriesTitle . "', '" . $numberOfEpisodes . "', '" . $lastEpisode . "', '" . $lastSeason . "'";
+    $sqlString .= $episodeNumber . $episodeTitle . $seasonNumber . $seriesTitle . $numberOfEpisodes . $lastEpisode . $lastSeason;
+
+    //$sqlString .= "), ";
+
+    //echo "test <br>";
+    if ($i == $arrLength - 1)
+    {
+        $sqlString .= ");";
+    }
+    else
+    {
+        $sqlString .= "), ";
+    }
+}
+
+echo $sqlString;
+$connect->query($sqlString);
+
+fclose($myfile);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 ?>
-
-
-</body>
-</html>
-
-<script>
-    /*var vid = document.getElementById("videoID");
-    vid.onended = function (event)
-    {
-        alert("The video has ended!");
-    }*/
-</script>
